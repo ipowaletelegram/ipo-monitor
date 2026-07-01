@@ -79,6 +79,53 @@ URLS = [
         "mode": "text",
         "selector": None,
         "ignore": []
-    }
+    },
 
-]
+    {
+        "name": "sebidrhp",
+        "url": "https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListing=yes&sid=3&ssid=15&smid=10",
+        "mode": "text",
+        "selector": None,
+        "ignore": []
+    },
+
+    {
+        "name": "sebirhp",
+        "url": "https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListing=yes&sid=3&ssid=15&smid=11",
+        "mode": "text",
+        "selector": None,
+        "ignore": []
+    },
+
+    {
+        "name": "NSE",
+        "url": "https://www.nseindia.com/market-data/all-upcoming-issues-ipo",
+        "mode": "text",
+        "selector": None,
+        "ignore": []
+    },
+
+    {
+        "name": "Kfintech",
+        "url": "https://ipostatus.kfintech.com/",
+        "mode": "text",
+        "selector": None,
+        "ignore": []
+    },
+
+    {
+        "name": "MUFG",
+        "url": "https://in.mpms.mufg.com/Initial_Offer/public-issues.html",
+        "mode": "text",
+        "selector": None,
+        "ignore": []
+    },
+
+    {
+        "name": "Bigshare",
+        "url": "https://ipo2.bigshareonline.com/ipo_status.html",
+        "mode": "text",
+        "selector": None,
+        "ignore": []
+    }
+    ]
