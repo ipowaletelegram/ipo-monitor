@@ -2,7 +2,6 @@ name: NSE IPO Monitor
 
 on:
   workflow_dispatch:
-
   schedule:
     - cron: "*/10 * * * *"
 
@@ -29,17 +28,3 @@ jobs:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
         run: python main.py
-
-      - name: Commit monitor.json
-        run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
-
-          git add monitor.json
-
-          if git diff --cached --quiet; then
-            echo "No changes"
-          else
-            git commit -m "Update monitor"
-            git push
-          fi
