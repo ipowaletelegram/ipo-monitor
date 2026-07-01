@@ -1,63 +1,84 @@
 import os
 
-# Telegram
+# ==============================
+# TELEGRAM SETTINGS
+# ==============================
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 CHAT_ID = os.getenv("CHAT_ID")
 
-# Check interval (GitHub Actions handles scheduling)
+# ==============================
+# GENERAL SETTINGS
+# ==============================
+
 CHECK_INTERVAL = 600
-
-# Request timeout
 TIMEOUT = 30
-
-# Request headers
-
-HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
-    "Accept-Language": "en-US,en;q=0.9",
-    "Accept": "*/*",
-    "Connection": "keep-alive"
-}
-
-# File to store hashes
 
 DATA_FILE = "monitor.json"
 
-# Ignore words
+# ==============================
+# REQUEST HEADERS
+# ==============================
+
+HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/138.0.0.0 Safari/537.36"
+    ),
+    "Accept": "*/*",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Connection": "keep-alive",
+}
+
+# ==============================
+# WORDS TO IGNORE
+# ==============================
 
 IGNORE_WORDS = [
     "cookie",
     "cookies",
     "privacy",
+    "privacy policy",
     "copyright",
     "advertisement",
     "ads",
-    "subscribe",
     "login",
-    "sign in"
+    "sign in",
+    "subscribe",
+    "menu",
+    "accept",
+    "reject"
 ]
 
-# Universal Website List
+# ==============================
+# UNIVERSAL WEBSITE LIST
+# ==============================
 
 URLS = [
 
     {
-        "name": "NSE",
+        "name": "SEBI DRHP",
         "url": "https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListing=yes&sid=3&ssid=15&smid=10",
-        "mode": "text"
+        "mode": "text",
+        "selector": None,
+        "ignore": []
     },
 
     {
-        "name": "BSE",
+        "name": "IPOJI",
         "url": "https://www.ipoji.com/ipo/knack-packaging-ipo",
-        "mode": "text"
+        "mode": "text",
+        "selector": None,
+        "ignore": []
     },
 
     {
-        "name": "SEBI",
+        "name": "IPOGyani GMP",
         "url": "https://ipogyani.com/ipo/knack-packaging-ipo/gmp",
-        "mode": "text"
+        "mode": "text",
+        "selector": None,
+        "ignore": []
     }
 
 ]
