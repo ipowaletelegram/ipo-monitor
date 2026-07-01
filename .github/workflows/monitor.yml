@@ -2,8 +2,9 @@ name: Universal Website Monitor
 
 on:
   push:
-  branches:
-    -main
+    branches:
+      - main
+
   workflow_dispatch:
 
   schedule:
@@ -13,13 +14,10 @@ permissions:
   contents: write
 
 jobs:
-
   monitor:
-
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
