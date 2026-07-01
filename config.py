@@ -50,7 +50,7 @@ URLS = [
 
     {
         "name": "BSE",
-        "url": "https://ipowatch.in/kusumgar-ipo-gmp-grey-market-premium/",
+        "url": "https://www.ipoji.com/ipo/knack-packaging-ipo",
         "mode": "text"
     },
 
