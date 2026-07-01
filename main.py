@@ -1,24 +1,29 @@
 from config import URLS
 
-from utils import download
-from utils import clean_text
-from utils import get_hash
-from utils import check_change
+from utils import (
+    download,
+    clean_text,
+    get_hash,
+    check_change,
+)
 
-from telegram import send_message
-from telegram import send_update
-from telegram import send_error
+from telegram import (
+    send_message,
+    send_update,
+    send_error,
+)
 
 
 def check_website(site):
 
-    name = site["name"]
-
-    url = site["url"]
+    name = site.get("name")
+    url = site.get("url")
+    mode = site.get("mode", "text")
 
     print("=" * 60)
-    print("Checking :", name)
-    print(url)
+    print(f"Checking : {name}")
+    print(f"URL      : {url}")
+    print(f"Mode     : {mode}")
 
     try:
 
@@ -32,19 +37,19 @@ def check_website(site):
 
         if changed:
 
-            print("CHANGE DETECTED")
+            print("✅ CHANGE DETECTED")
 
             send_update(name, url)
 
         else:
 
-            print("No Change")
+            print("✅ No Change")
 
     except Exception as e:
 
-        print("ERROR :", e)
+        print(f"❌ ERROR : {e}")
 
-        send_error(f"{name}\n\n{e}")
+        send_error(f"{name}\n\n{str(e)}")
 
 
 def startup_message():
@@ -52,14 +57,11 @@ def startup_message():
     try:
 
         send_message(
+            """🚀 <b>Universal Website Monitor Started</b>
 
-"""✅ <b>Universal Website Monitor Started</b>
+✅ GitHub Actions Running
 
-Monitoring Started Successfully.
-
-GitHub Actions : Running
-
-Ready to Detect Website Changes.
+Monitoring all configured websites...
 """
         )
 
@@ -68,25 +70,65 @@ Ready to Detect Website Changes.
         print(e)
 
 
-def main():
-
-    print()
+def summary(total, changed, failed):
 
     print("=" * 60)
-    print("Universal Website Monitor")
+    print("SUMMARY")
+    print("=" * 60)
+    print(f"Total Websites : {total}")
+    print(f"Changed        : {changed}")
+    print(f"Failed         : {failed}")
+    print("=" * 60)
+
+
+def main():
+
+    print("=" * 60)
+    print("UNIVERSAL WEBSITE MONITOR")
     print("=" * 60)
 
     startup_message()
 
+    total = 0
+    changed = 0
+    failed = 0
+
     for site in URLS:
 
-        check_website(site)
+        total += 1
 
-    print()
+        try:
 
-    print("=" * 60)
-    print("Finished")
-    print("=" * 60)
+            name = site["name"]
+            url = site["url"]
+
+            html = download(url)
+
+            text = clean_text(html)
+
+            new_hash = get_hash(text)
+
+            if check_change(name, new_hash):
+
+                changed += 1
+
+                send_update(name, url)
+
+                print(f"🔔 {name} Updated")
+
+            else:
+
+                print(f"✔ {name} No Change")
+
+        except Exception as e:
+
+            failed += 1
+
+            print(e)
+
+            send_error(f"{site.get('name')}\n\n{e}")
+
+    summary(total, changed, failed)
 
 
 if __name__ == "__main__":
