@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 
 # ---------------- CONFIG ---------------- #
 
-NSE_URL = "https://www.nseindia.com/get-quote/equity/RAMBHAJO/Advit-Jewels-Limited"
+NSE_URL = "https://www.nseindia.com/index-tracker/NIFTY%2050"
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 CHAT_ID = os.getenv("CHAT_ID")
