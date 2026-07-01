@@ -56,7 +56,7 @@ URLS = [
 
     {
         "name": "SEBI",
-        "url": "https://www.sebi.gov.in",
+        "url": "https://ipogyani.com/ipo/knack-packaging-ipo/gmp",
         "mode": "text"
     }
 
