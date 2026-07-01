@@ -6,8 +6,8 @@ from bs4 import BeautifulSoup
 
 NSE_URL = "https://www.nseindia.com/get-quote/equity/RAMBHAJO/Advit-Jewels-Limited"
 
-BOT_TOKEN = os.getenv("8453886638:AAGRB0psb6DW_zZQopj2MEZuWO7u3x8S-LY")
-CHAT_ID = os.getenv("8453886638")
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+CHAT_ID = os.getenv("CHAT_ID")
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0",
