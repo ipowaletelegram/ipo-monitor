@@ -8,9 +8,9 @@ from utils import (
 )
 
 from telegram import (
-    send_message,
     send_update,
     send_error,
+    send_message,
 )
 
 
@@ -37,48 +37,46 @@ def check_website(site):
 
         if changed:
 
-            print("✅ CHANGE DETECTED")
+            print(f"🔔 {name} Updated")
 
             send_update(name, url)
 
+            return True
+
         else:
 
-            print("✅ No Change")
+            print(f"✅ {name} No Change")
+
+            return False
 
     except Exception as e:
 
         print(f"❌ ERROR : {e}")
 
-        send_error(f"{name}\n\n{str(e)}")
+        send_error(f"{name}\n\n{e}")
+
+        return None
 
 
-def startup_message():
+def send_summary(total, changed, failed):
 
     try:
 
-        send_message(
-            """🚀 <b>Universal Website Monitor Started</b>
+        message = f"""
+📊 <b>Website Monitor Summary</b>
 
-✅ GitHub Actions Running
+🌐 Total Checked : <b>{total}</b>
 
-Monitoring all configured websites...
+🔔 Updated : <b>{changed}</b>
+
+❌ Failed : <b>{failed}</b>
 """
-        )
+
+        send_message(message)
 
     except Exception as e:
 
         print(e)
-
-
-def summary(total, changed, failed):
-
-    print("=" * 60)
-    print("SUMMARY")
-    print("=" * 60)
-    print(f"Total Websites : {total}")
-    print(f"Changed        : {changed}")
-    print(f"Failed         : {failed}")
-    print("=" * 60)
 
 
 def main():
@@ -86,8 +84,6 @@ def main():
     print("=" * 60)
     print("UNIVERSAL WEBSITE MONITOR")
     print("=" * 60)
-
-    startup_message()
 
     total = 0
     changed = 0
@@ -97,39 +93,28 @@ def main():
 
         total += 1
 
-        try:
+        result = check_website(site)
 
-            name = site["name"]
-            url = site["url"]
+        if result is True:
 
-            html = download(url)
+            changed += 1
 
-            text = clean_text(html)
-
-            new_hash = get_hash(text)
-
-            if check_change(name, new_hash):
-
-                changed += 1
-
-                send_update(name, url)
-                print("Old Hash Changed")
-
-                print(f"🔔 {name} Updated")
-
-            else:
-
-                print(f"✔ {name} No Change")
-
-        except Exception as e:
+        elif result is None:
 
             failed += 1
 
-            print(e)
+    print("=" * 60)
+    print("SUMMARY")
+    print("=" * 60)
+    print(f"Total   : {total}")
+    print(f"Updated : {changed}")
+    print(f"Failed  : {failed}")
+    print("=" * 60)
 
-            send_error(f"{site.get('name')}\n\n{e}")
+    # Summary sirf tab bhejo jab kuch update ya error ho
+    if changed > 0 or failed > 0:
 
-    summary(total, changed, failed)
+        send_summary(total, changed, failed)
 
 
 if __name__ == "__main__":
