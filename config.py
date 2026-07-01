@@ -44,7 +44,7 @@ URLS = [
 
     {
         "name": "NSE",
-        "url": "https://www.nseindia.com/market-data/all-upcoming-issues-ipo",
+        "url": "https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListing=yes&sid=3&ssid=15&smid=10",
         "mode": "text"
     },
 
