@@ -1,6 +1,9 @@
 name: Universal Website Monitor
 
 on:
+  push:
+  branches:
+    -main
   workflow_dispatch:
 
   schedule:
