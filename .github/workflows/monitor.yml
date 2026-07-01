@@ -28,10 +28,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run Monitor
+            - name: Run Monitor
         env:
-          BOT_TOKEN: ${{ secrets.8453886638:AAGRB0psb6DW_zZQopj2MEZuWO7u3x8S-LY}}
-          CHAT_ID: ${{ secrets.8453886638}}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
         run: python main.py
 
       - name: Commit Updated monitor.json
