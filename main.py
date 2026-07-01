@@ -113,6 +113,7 @@ def main():
                 changed += 1
 
                 send_update(name, url)
+                print("Old Hash Changed")
 
                 print(f"🔔 {name} Updated")
 
