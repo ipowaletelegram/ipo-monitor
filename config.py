@@ -44,13 +44,13 @@ URLS = [
 
     {
         "name": "NSE",
-        "url": "https://www.nseindia.com/index-tracker/NIFTY%2050",
+        "url": "https://www.nseindia.com/market-data/all-upcoming-issues-ipo",
         "mode": "text"
     },
 
     {
         "name": "BSE",
-        "url": "https://www.bseindia.com/sensex/code/16",
+        "url": "https://ipowatch.in/kusumgar-ipo-gmp-grey-market-premium/",
         "mode": "text"
     },
 
