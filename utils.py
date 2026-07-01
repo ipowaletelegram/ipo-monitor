@@ -2,64 +2,115 @@ import hashlib
 import json
 import os
 import re
+import time
 
 import requests
-
 from bs4 import BeautifulSoup
 
-from config import HEADERS
-from config import DATA_FILE
-from config import IGNORE_WORDS
-from config import TIMEOUT
+from config import (
+    HEADERS,
+    DATA_FILE,
+    IGNORE_WORDS,
+    TIMEOUT
+)
 
+# -----------------------------
+# HTTP SESSION
+# -----------------------------
+
+session = requests.Session()
+session.headers.update(HEADERS)
+
+
+# -----------------------------
+# DOWNLOAD WEBSITE
+# -----------------------------
 
 def download(url):
 
-    session = requests.Session()
+    last_error = None
 
-    response = session.get(
+    for attempt in range(3):
 
-        url,
+        try:
 
-        headers=HEADERS,
+            response = session.get(
+                url,
+                timeout=TIMEOUT,
+                allow_redirects=True
+            )
 
-        timeout=TIMEOUT
+            response.raise_for_status()
 
-    )
+            return response.text
 
-    response.raise_for_status()
+        except Exception as e:
 
-    return response.text
+            last_error = e
 
+            print(f"Retry {attempt+1}/3 : {e}")
+
+            time.sleep(2)
+
+    raise last_error
+
+
+# -----------------------------
+# CLEAN HTML
+# -----------------------------
 
 def clean_text(html):
 
     soup = BeautifulSoup(html, "html.parser")
 
-    for tag in soup(["script", "style", "noscript"]):
+    # Remove unwanted tags
+    for tag in soup([
+        "script",
+        "style",
+        "noscript",
+        "svg",
+        "iframe"
+    ]):
         tag.decompose()
 
-    text = soup.get_text(" ", strip=True)
+    text = soup.get_text(separator="\n")
 
     text = text.lower()
 
+    # Ignore configured words
     for word in IGNORE_WORDS:
 
         text = text.replace(word.lower(), "")
 
-    text = re.sub(r"\s+", " ", text)
+    # Remove URLs
+    text = re.sub(r"https?://\S+", "", text)
 
-    return text
+    # Remove emails
+    text = re.sub(r"\S+@\S+", "", text)
 
+    # Remove extra blank lines
+    text = re.sub(r"\n+", "\n", text)
+
+    # Remove extra spaces
+    text = re.sub(r"[ \t]+", " ", text)
+
+    return text.strip()
+
+
+# -----------------------------
+# HASH
+# -----------------------------
 
 def get_hash(text):
 
     return hashlib.sha256(
-
-        text.encode()
-
+        text.encode("utf-8")
     ).hexdigest()
 
+
+# -----------------------------
+# LOAD HASHES
+# -----------------------------
 
 def load_hashes():
 
@@ -67,25 +118,40 @@ def load_hashes():
 
         return {}
 
-    with open(DATA_FILE, "r") as f:
+    try:
 
-        return json.load(f)
+        with open(DATA_FILE, "r", encoding="utf-8") as f:
 
+            return json.load(f)
+
+    except Exception:
+
+        return {}
+
+
+# -----------------------------
+# SAVE HASHES
+# -----------------------------
 
 def save_hashes(data):
 
-    with open(DATA_FILE, "w") as f:
+    with open(
+        DATA_FILE,
+        "w",
+        encoding="utf-8"
+    ) as f:
 
         json.dump(
-
             data,
-
             f,
-
-            indent=4
-
+            indent=4,
+            ensure_ascii=False
         )
 
+
+# -----------------------------
+# CHECK CHANGE
+# -----------------------------
 
 def check_change(name, new_hash):
 
@@ -93,20 +159,52 @@ def check_change(name, new_hash):
 
     old_hash = hashes.get(name)
 
+    # First Run
     if old_hash is None:
 
         hashes[name] = new_hash
 
         save_hashes(hashes)
 
+        print(f"{name} : First Run")
+
         return False
 
+    # Changed
     if old_hash != new_hash:
 
         hashes[name] = new_hash
 
         save_hashes(hashes)
 
+        print(f"{name} : Changed")
+
         return True
 
+    print(f"{name} : No Change")
+
     return False
+
+
+# -----------------------------
+# DELETE HASH
+# -----------------------------
+
+def delete_hash(name):
+
+    hashes = load_hashes()
+
+    if name in hashes:
+
+        del hashes[name]
+
+        save_hashes(hashes)
+
+
+# -----------------------------
+# RESET ALL
+# -----------------------------
+
+def reset_hashes():
+
+    save_hashes({})
