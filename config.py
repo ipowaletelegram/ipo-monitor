@@ -74,8 +74,8 @@ URLS = [
     },
 
     {
-        "name": "IPOGyani GMP",
-        "url": "https://ipogyani.com/ipo/knack-packaging-ipo/gmp",
+        "name": "IPOPremium SBI",
+        "url": "https://www.ipopremium.in/view/ipo/1250/sbi-funds-management-ltd",
         "mode": "text",
         "selector": None,
         "ignore": []
