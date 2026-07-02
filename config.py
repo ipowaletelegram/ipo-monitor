@@ -99,7 +99,7 @@ URLS = [
 
     {
         "name": "NSE",
-        "url": "https://www.nseindia.com/market-data/all-upcoming-issues-ipo",
+        "url": "https://www.nseindia.com/get-quote/equity/CSM/CSM-Technologies-Limited",
         "mode": "text",
         "selector": None,
         "ignore": []
