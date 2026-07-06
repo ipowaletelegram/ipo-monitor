@@ -33,6 +33,11 @@ def parse_investorgain(html):
         raise Exception("reportTable not found")
 
     rows = table.select("tbody tr")
+    print("Rows Found:", len(rows))
+
+for i, row in enumerate(rows):
+    cols = row.find_all("td")
+    print(f"Row {i} Columns:", len(cols))
 
     print("Rows Found :", len(rows))
 
@@ -42,8 +47,7 @@ def parse_investorgain(html):
 
         cols = row.find_all("td")
 
-        if len(cols) < 12:
-            continue
+        print("Columns:", len(cols))
 
         company = clean(cols[0].find("a").get_text())
 
