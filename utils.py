@@ -208,3 +208,8 @@ def delete_hash(name):
 def reset_hashes():
 
     save_hashes({})
+#------------------------
+html = download(site["url"])
+
+with open("page.html", "w", encoding="utf-8") as f:
+    f.write(html)
