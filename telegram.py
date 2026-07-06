@@ -3,128 +3,90 @@ from datetime import datetime
 
 from config import BOT_TOKEN, CHAT_ID
 
-TELEGRAM_API = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
+API = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
 
 
 def send_message(message):
 
-    if not BOT_TOKEN:
-        print("❌ BOT_TOKEN Missing")
-        return False
-
-    if not CHAT_ID:
-        print("❌ CHAT_ID Missing")
-        return False
-
-    try:
-
-        response = requests.post(
-            TELEGRAM_API,
-            data={
-                "chat_id": CHAT_ID,
-                "text": message,
-                "parse_mode": "HTML",
-                "disable_web_page_preview": True
-            },
-            timeout=30
-        )
-
-        response.raise_for_status()
-
-        result = response.json()
-
-        if result.get("ok"):
-            print("✅ Telegram Message Sent")
-            return True
-
-        print(result)
-        return False
-
-    except Exception as e:
-
-        print("Telegram Error :", e)
-
-        return False
+    requests.post(
+        API,
+        data={
+            "chat_id": CHAT_ID,
+            "text": message,
+            "parse_mode": "HTML",
+            "disable_web_page_preview": True,
+        },
+        timeout=30,
+    )
 
 
-def send_startup():
+def send_gmp_update(new, old=None):
 
-    now = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+    now = datetime.now().strftime("%d %b %Y %I:%M %p")
 
-    message = f"""
-🚀 <b>Universal Website Monitor Started</b>
+    company = new["company"]
+    issue = new["issue_price"]
+    gmp = new["gmp"]
+    gain = new["gain"]
+    lot = new["lot"]
+    open_date = new["open"]
+    close_date = new["close"]
+    listing = new["listing"]
 
-✅ Status : Running
+    # Decide Increase / Decrease
+    title = "🆕 New IPO GMP"
 
-🕒 Started :
-<code>{now}</code>
+    if old:
 
-🤖 GitHub Actions Ready
-"""
+        try:
 
-    send_message(message)
+            old_gmp = float(old["gmp"])
+            new_gmp = float(gmp)
 
+            if new_gmp > old_gmp:
 
-def send_update(name, url):
+                title = "🟢 GMP Increased"
 
-    now = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+            elif new_gmp < old_gmp:
 
-    message = f"""
-🚨 <b>Website Updated</b>
+                title = "🔴 GMP Decreased"
 
-🌐 <b>Website :</b>
-<code>{name}</code>
+            else:
 
-🔗 <b>URL :</b>
-{url}
+                title = "🔄 IPO Updated"
 
-🕒 <b>Detected :</b>
-<code>{now}</code>
+        except:
 
-━━━━━━━━━━━━━━━━━━━━
-"""
-
-    send_message(message)
-
-
-def send_error(error):
-
-    now = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
-
-    message = f"""
-⚠️ <b>Website Monitor Error</b>
-
-🕒
-<code>{now}</code>
-
-<code>{error}</code>
-"""
-
-    send_message(message)
-
-
-def send_test():
-
-    now = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
-
-    message = f"""
-🧪 <b>Telegram Test Successful</b>
-
-Everything is working correctly.
-
-🕒
-<code>{now}</code>
-"""
-
-    send_message(message)
-
-
-def send_custom(title, body):
+            pass
 
     message = f"""
 <b>{title}</b>
 
-{body}
+🏢 <b>{company}</b>
+
+💰 <b>Issue Price</b>
+₹{issue}
+
+📈 <b>Current GMP</b>
+₹{gmp} ({gain})
+
+📦 <b>Lot Size</b>
+{lot}
+
+📅 <b>Open</b>
+{open_date}
+
+📅 <b>Close</b>
+{close_date}
+
+🚀 <b>Listing</b>
+{listing}
+
+━━━━━━━━━━━━━━━━━━
+
+📢 <b>BE.IPOWale</b>
+
+🕒 <code>{now}</code>
 """
 
     send_message(message)
