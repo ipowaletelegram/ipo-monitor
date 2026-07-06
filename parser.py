@@ -39,9 +39,8 @@ def parse_investorgain(html):
     if table is None:
         raise Exception("reportTable not found")
 
-    tbody = table.find("tbody")
-
-    rows = tbody.find_all("tr")
+    rows = table.select("tbody tr")
+    print("Rows Found :", len(rows))
 
     ipos = []
 
@@ -52,11 +51,11 @@ def parse_investorgain(html):
         if len(cols) < 12:
             continue
 
-        company = clean(cols[0].get_text(" "))
+        company = clean(cols[0].find("a").get_text())
 
-        gmp_data = extract_gmp(
-            clean(cols[1].get_text(" "))
-        )
+        gmp_text = clean(cols[1].get_text(" ", strip=True))
+
+gmp_data = extract_gmp(gmp_text)
 
         issue_price = clean(cols[4].get_text())
 
