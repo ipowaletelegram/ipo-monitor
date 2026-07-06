@@ -21,8 +21,6 @@ def extract_gmp(text):
         "gmp": "",
         "gain": ""
     }
-
-
 def parse_investorgain(html):
 
     soup = BeautifulSoup(html, "html.parser")
@@ -33,21 +31,19 @@ def parse_investorgain(html):
         raise Exception("reportTable not found")
 
     rows = table.select("tbody tr")
+
     print("Rows Found:", len(rows))
-
-for i, row in enumerate(rows):
-    cols = row.find_all("td")
-    print(f"Row {i} Columns:", len(cols))
-
-    print("Rows Found :", len(rows))
 
     ipos = []
 
-    for row in rows:
+    for i, row in enumerate(rows):
 
         cols = row.find_all("td")
 
-        print("Columns:", len(cols))
+        print(f"Row {i} Columns:", len(cols))
+
+        if len(cols) < 12:
+            continue
 
         company = clean(cols[0].find("a").get_text())
 
@@ -55,17 +51,17 @@ for i, row in enumerate(rows):
 
         gmp_data = extract_gmp(gmp_text)
 
-        issue_price = clean(cols[4].get_text())
+        issue_price = clean(cols[4].get_text(strip=True))
 
-        lot = clean(cols[6].get_text())
+        lot = clean(cols[6].get_text(strip=True))
 
-        open_date = clean(cols[7].get_text())
+        open_date = clean(cols[7].get_text(strip=True))
 
-        close_date = clean(cols[8].get_text())
+        close_date = clean(cols[8].get_text(strip=True))
 
-        listing = clean(cols[10].get_text())
+        listing = clean(cols[10].get_text(strip=True))
 
-        updated = clean(cols[11].get_text())
+        updated = clean(cols[11].get_text(strip=True))
 
         ipos.append({
             "company": company,
