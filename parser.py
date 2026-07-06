@@ -53,21 +53,21 @@ def parse_investorgain(html):
 
         company = clean(cols[0].find("a").get_text())
 
-        gmp_text = clean(cols[1].get_text(" ", strip=True))
+gmp_text = clean(cols[1].get_text(" ", strip=True))
 
 gmp_data = extract_gmp(gmp_text)
 
-        issue_price = clean(cols[4].get_text())
+issue_price = clean(cols[4].get_text())
 
-        lot = clean(cols[6].get_text())
+lot = clean(cols[6].get_text())
 
-        open_date = clean(cols[7].get_text())
+open_date = clean(cols[7].get_text())
 
-        close_date = clean(cols[8].get_text())
+close_date = clean(cols[8].get_text())
 
-        listing = clean(cols[10].get_text())
+listing = clean(cols[10].get_text())
 
-        updated = clean(cols[11].get_text())
+updated = clean(cols[11].get_text())
 
         ipos.append({
 
