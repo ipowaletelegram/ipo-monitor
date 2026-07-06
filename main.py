@@ -17,8 +17,8 @@ def main():
 
     for site in URLS:
 
-        print(f"Checking : {site['name']}")
-
+        if "InvestorGain" not in site["name"]:
+        continue
         try:
 
             html = download(site["url"])
