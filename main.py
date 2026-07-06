@@ -17,34 +17,36 @@ def main():
 
     for site in URLS:
 
-        if "InvestorGain" not in site["name"]:
+    if "InvestorGain" not in site["name"]:
         continue
-        try:
 
-            html = download(site["url"])
+    print(f"Checking : {site['name']}")
 
-            ipos = parse_investorgain(html)
+    try:
 
-            print(f"Found {len(ipos)} IPOs")
+        html = download(site["url"])
 
-            total += len(ipos)
+        ipos = parse_investorgain(html)
 
-            for ipo in ipos:
+        print(f"Found {len(ipos)} IPOs")
 
-                is_changed, old = has_changed(ipo)
+        total += len(ipos)
 
-                if is_changed:
+        for ipo in ipos:
 
-                    changed += 1
+            is_changed, old = has_changed(ipo)
 
-                    print(f"Updated : {ipo['company']}")
+            if is_changed:
 
-                    send_gmp_update(ipo, old)
+                changed += 1
 
-        except Exception as e:
+                print(f"Updated : {ipo['company']}")
 
-            print(e)
+                send_gmp_update(ipo, old)
 
+    except Exception as e:
+
+        print(e)
     print("=" * 60)
     print(f"Total IPOs : {total}")
     print(f"Changed    : {changed}")
