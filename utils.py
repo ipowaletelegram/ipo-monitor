@@ -4,7 +4,7 @@ import os
 import re
 import time
 
-import requests
+import cloudscraper
 from bs4 import BeautifulSoup
 
 from config import (
@@ -18,7 +18,15 @@ from config import (
 # HTTP SESSION
 # -----------------------------
 
-session = requests.Session()
+scraper = cloudscraper.create_scraper(
+    browser={
+        "browser": "chrome",
+        "platform": "windows",
+        "mobile": False,
+    }
+)
+
+session = scraper
 session.headers.update({
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
@@ -53,7 +61,7 @@ def download(url):
             print("Status:", response.status_code)
             print("Final URL:", response.url)
             print("Content Length:", len(response.text))
-
+            print(response.text[:500])
             return response.text
 
         except Exception as e:
