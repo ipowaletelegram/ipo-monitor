@@ -1,120 +1,54 @@
 from config import URLS
+from utils import download
 
-from utils import (
-    download,
-    clean_text,
-    get_hash,
-    check_change,
-)
-
-from telegram import (
-    send_update,
-    send_error,
-    send_message,
-)
-
-
-def check_website(site):
-
-    name = site.get("name")
-    url = site.get("url")
-    mode = site.get("mode", "text")
-
-    print("=" * 60)
-    print(f"Checking : {name}")
-    print(f"URL      : {url}")
-    print(f"Mode     : {mode}")
-
-    try:
-
-        html = download(url)
-
-        text = clean_text(html)
-
-        new_hash = get_hash(text)
-
-        changed = check_change(name, new_hash)
-
-        if changed:
-
-            print(f"🔔 {name} Updated")
-
-            send_update(name, url)
-
-            return True
-
-        else:
-
-            print(f"✅ {name} No Change")
-
-            return False
-
-    except Exception as e:
-
-        print(f"❌ ERROR : {e}")
-
-        send_error(f"{name}\n\n{e}")
-
-        return None
-
-
-def send_summary(total, changed, failed):
-
-    try:
-
-        message = f"""
-📊 <b>Website Monitor Summary</b>
-
-🌐 Total Checked : <b>{total}</b>
-
-🔔 Updated : <b>{changed}</b>
-
-❌ Failed : <b>{failed}</b>
-"""
-
-        send_message(message)
-
-    except Exception as e:
-
-        print(e)
+from parser import parse_investorgain
+from storage import has_changed
+from telegram import send_gmp_update
 
 
 def main():
 
     print("=" * 60)
-    print("UNIVERSAL WEBSITE MONITOR")
+    print("BE.IPOWale GMP Monitor")
     print("=" * 60)
 
     total = 0
     changed = 0
-    failed = 0
 
     for site in URLS:
 
-        total += 1
+        print(f"Checking : {site['name']}")
 
-        result = check_website(site)
+        try:
 
-        if result is True:
+            html = download(site["url"])
 
-            changed += 1
+            ipos = parse_investorgain(html)
 
-        elif result is None:
+            print(f"Found {len(ipos)} IPOs")
 
-            failed += 1
+            total += len(ipos)
+
+            for ipo in ipos:
+
+                is_changed, old = has_changed(ipo)
+
+                if is_changed:
+
+                    changed += 1
+
+                    print(f"Updated : {ipo['company']}")
+
+                    send_gmp_update(ipo, old)
+
+        except Exception as e:
+
+            print(e)
 
     print("=" * 60)
-    print("SUMMARY")
+    print(f"Total IPOs : {total}")
+    print(f"Changed    : {changed}")
     print("=" * 60)
-    print(f"Total   : {total}")
-    print(f"Updated : {changed}")
-    print(f"Failed  : {failed}")
-    print("=" * 60)
-
-    # Summary sirf tab bhejo jab kuch update ya error ho
-    if changed > 0 or failed > 0:
-
-        send_summary(total, changed, failed)
 
 
 if __name__ == "__main__":
