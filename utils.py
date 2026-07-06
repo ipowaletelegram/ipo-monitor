@@ -19,6 +19,14 @@ from config import (
 # -----------------------------
 
 session = requests.Session()
+session.headers.update({
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Cache-Control": "no-cache",
+    "Pragma": "no-cache",
+    "Referer": "https://www.google.com/",
+})
 session.headers.update(HEADERS)
 
 
@@ -37,10 +45,14 @@ def download(url):
             response = session.get(
                 url,
                 timeout=TIMEOUT,
-                allow_redirects=True
+                allow_redirects=True,
             )
 
             response.raise_for_status()
+
+            print("Status:", response.status_code)
+            print("Final URL:", response.url)
+            print("Content Length:", len(response.text))
 
             return response.text
 
@@ -53,7 +65,6 @@ def download(url):
             time.sleep(2)
 
     raise last_error
-
 
 # -----------------------------
 # CLEAN HTML
