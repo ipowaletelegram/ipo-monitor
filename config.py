@@ -72,10 +72,10 @@ URLS = [
         "ignore": []
     },
     {
-        "name": "GMP Investor Gain",
-        "url": "https://www.chittorgarh.com/ipo/knack-packaging-ipo/2592/",
-        "mode": "text",
-        "selector": None,
-        "ignore": []
-    }
+    "name": "InvestorGain Mainboard GMP",
+    "url": "https://www.investorgain.com/report/ipo-gmp-live/331/ipo/",
+    "mode": "text",
+    "selector": None,
+    "ignore": []
+}
 ]
