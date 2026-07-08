@@ -8,7 +8,7 @@ on:
       - main
 
   schedule:
-    - cron: "5 * * * *"
+    - cron: "0.5 * * * *"
 
 permissions:
   contents: write
