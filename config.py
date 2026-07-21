@@ -71,11 +71,5 @@ URLS = [
         "selector": None,
         "ignore": []
     },
-    {
-        "name": "Knack Packaging",
-        "url": "https://www.nseindia.com/get-quote/equity/KNACK/Knack-Packaging-Limited",
-        "mode": "text",
-        "selector": None,
-        "ignore": []
-    }
+    
 ]
