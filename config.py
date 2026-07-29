@@ -71,5 +71,12 @@ URLS = [
         "selector": None,
         "ignore": []
     },
+    {
+        "name": "Juniper Anchor NSE",
+        "url": "https://www.nseindia.com/market-data/issue-information?symbol=JNPR&series=EQ&type=Forthcoming",
+        "mode": "text",
+        "selector": None,
+        "ignore": []
+    }
     
 ]
